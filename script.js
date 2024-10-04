@@ -140,6 +140,16 @@ btnSort.addEventListener('click', function (e) {
   displayTransactions(currentAccount.transactions, !sorted);
   sorted = !sorted;
 });
+
+
+function simple(content){
+  labelWelcome.textContent=`${content}`;
+    inputTransferTo.value=inputTransferAmount.value='';
+    setTimeout(function(){
+      labelWelcome.textContent=`Welcome back, ${currentAccount.AccountHolderName}`;
+    },5000)  
+}
+
  
 
 //Timer function
@@ -203,19 +213,21 @@ btnLogin.addEventListener('click',function(e){
 btnTransfer.addEventListener('click',function(e){
   e.preventDefault();
   const usrname=accounts.find( acc=>acc.username===inputTransferTo.value)
-  if(usrname){
+  const evaluate=usrname.username===currentAccount.username;
+  if(usrname && !evaluate){
     usrname.transactions.push(Number(inputTransferAmount.value))
     currentAccount.transactions.push(Number(inputTransferAmount.value)*-1);
     updateInterface(currentAccount);
     inputTransferTo.value=inputTransferAmount.value='';
   }
   else{
-    labelWelcome.textContent="User To Transfer Amount is  Not Found";
-    inputTransferTo.value=inputTransferAmount.value='';
-    setTimeout(function(){
-      labelWelcome.textContent=`Welcome back, ${currentAccount.AccountHolderName}`;
-    },5000)
-  }
+    if(evaluate){
+        simple('You cannot Transfer to your Own Account')
+    }
+    else{
+      simple("User Not Found....! :(")
+    }
+  }  
 })
 
 
